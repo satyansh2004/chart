@@ -1,0 +1,16 @@
+/* src/components/Toolbar.css
+   Load this AFTER your Tailwind CSS entry (so it appears later in cascade).
+*/
+
+.export-dropdown,
+.export-dropdown * {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  mix-blend-mode: normal !important;
+  filter: none !important;
+}
+
+/* keep hover UX consistent */
+.export-dropdown li:hover {
+  background-color: #f3f4f6 !important; /* tailwind gray-100 */
+}

@@ -12,6 +12,8 @@ const Sidebar = ({
     chartSettings,
     setChartSettings,
     mobileSidebarOpen,          // ✅ add this
+    darkMode,
+    setDarkMode,
     // setMobileSidebarOpen,
 }) => {
 
@@ -54,6 +56,15 @@ const Sidebar = ({
         >
             {/* Header Section */}
             <div className="p-4 border-b flex-shrink-0">
+
+                {/*Dark/Light mode button will come here*/}
+                <button
+                    onClick={() => setDarkMode(!darkMode)}
+                    className={`mb-4 px-3 py-2 rounded ${darkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-300 text-black hover:bg-gray-400'} transition`}
+                >
+                    {darkMode ? '🌙 Dark' : '☀️ Light'}
+                </button>
+
                 <h2 className="text-lg font-semibold mb-3">📊 Data Editor</h2>
 
                 {/* Upload Button */}
@@ -92,7 +103,12 @@ const Sidebar = ({
                     <select
                         value={chartType}
                         onChange={(e) => setChartType(e.target.value)}
-                        className="w-full border p-1 text-sm rounded"
+                        className={`w-full border p-1 text-sm rounded 
+        ${darkMode
+                                ? 'bg-gray-900 text-white'  // dark sidebar → dark dropdown
+                                : 'bg-gray-100 text-black'  // light sidebar → light dropdown
+                            }`
+                        }
                     >
                         {/* Basic Charts */}
                         <option value="bar">Bar</option>
@@ -264,7 +280,11 @@ const Sidebar = ({
                         <label htmlFor="prefix">Prefix</label>
                         <select
                             id="prefix"
-                            className="w-full border p-2 text-sm rounded"
+                            className={`w-full border p-2 text-sm rounded 
+        ${darkMode
+                                    ? 'bg-gray-900 text-white'  // Dark sidebar → dark dropdown
+                                    : 'bg-gray-100 text-black'  // Light sidebar → light dropdown
+                                }`}
                             value={chartSettings.prefix}
                             onChange={e => handleSettingChange('prefix', e.target.value)}
                         >

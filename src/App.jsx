@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
 import Sidebar from "./components/Sidebar";
 import Chart from "./components/Chart";
@@ -19,6 +19,14 @@ export default function App() {
     labelFont: "normal",
   });
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  // ✅ Dark mode state
+  const [darkMode, setDarkMode] = useState(false);
+
+  // Update body class for overall background
+  useEffect(() => {
+    document.body.classList.toggle("dark", darkMode);
+  }, [darkMode]);
 
   const updateRowsWithHistory = (newRows) => {
     setRows(typeof newRows === "function" ? newRows(rows) : newRows);
@@ -73,7 +81,7 @@ export default function App() {
 
   return (
     <>
-      {/* Toolbar */}
+      {/* Toolbar remains unchanged */}
       <Toolbar mobileSidebarOpen={mobileSidebarOpen} setMobileSidebarOpen={setMobileSidebarOpen} />
 
       <div className="flex h-screen overflow-hidden">
@@ -90,7 +98,8 @@ export default function App() {
           chartSettings={chartSettings}
           setChartSettings={setChartSettings}
           mobileSidebarOpen={mobileSidebarOpen}
-          setMobileSidebarOpen={setMobileSidebarOpen}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
         />
 
         {/* Chart container */}
@@ -102,5 +111,4 @@ export default function App() {
       </div>
     </>
   );
-
 }

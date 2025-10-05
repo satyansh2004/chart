@@ -36,4 +36,10 @@ body {
   scrollbar-color: #c1c1c1 #f1f1f1;
 }
 
-/* For the top chart */
+body.dark {
+  background-color: #1e1e1e;
+  color: #f0f0f0;
+}
+
+.dark .bg-gray-100 { background-color: #2c2c2c; }
+.dark .text-black { color: #f0f0f0; }
