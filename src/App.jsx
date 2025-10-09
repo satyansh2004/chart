@@ -4,6 +4,8 @@ import Sidebar from "./components/Sidebar";
 import Chart from "./components/Chart";
 import Toolbar from "./components/Toolbar";
 
+const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+
 export default function App() {
   const [rows, setRows] = useState([]);
   const [chartType, setChartType] = useState("bar");
@@ -19,24 +21,18 @@ export default function App() {
     labelFont: "normal",
   });
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-
-  // ✅ Dark mode state
   const [darkMode, setDarkMode] = useState(false);
 
-  // Update body class for overall background
   useEffect(() => {
     document.body.classList.toggle("dark", darkMode);
   }, [darkMode]);
 
-  const updateRowsWithHistory = (newRows) => {
+  const updateRowsWithHistory = (newRows) =>
     setRows(typeof newRows === "function" ? newRows(rows) : newRows);
-  };
-
-  const handleRowsChange = (newRows) => updateRowsWithHistory(newRows);
 
   const addRow = () => {
     updateRowsWithHistory((prevRows) => {
-      if (prevRows.length === 0) return [{ x: "", y1: "" }];
+      if (!prevRows.length) return [{ x: "", y1: "" }];
       const yKeys = Object.keys(prevRows[0]).filter((k) => k.startsWith("y"));
       const newRow = { x: "" };
       yKeys.forEach((key) => (newRow[key] = ""));
@@ -53,7 +49,9 @@ export default function App() {
         : 1;
     const newKey = `y${nextIndex}`;
     const newRows =
-      rows.length === 0 ? [{ x: "", [newKey]: "" }] : rows.map((r) => ({ ...r, [newKey]: "" }));
+      rows.length === 0
+        ? [{ x: "", [newKey]: "" }]
+        : rows.map((r) => ({ ...r, [newKey]: "" }));
     updateRowsWithHistory(newRows);
   };
 
@@ -81,14 +79,15 @@ export default function App() {
 
   return (
     <>
-      {/* Toolbar remains unchanged */}
-      <Toolbar mobileSidebarOpen={mobileSidebarOpen} setMobileSidebarOpen={setMobileSidebarOpen} />
+      <Toolbar
+        mobileSidebarOpen={mobileSidebarOpen}
+        setMobileSidebarOpen={setMobileSidebarOpen}
+      />
 
       <div className="flex h-screen overflow-hidden">
-        {/* Sidebar */}
         <Sidebar
           rows={rows}
-          onRowsChange={handleRowsChange}
+          onRowsChange={updateRowsWithHistory}
           onFileUpload={handleFileUpload}
           addRow={addRow}
           removeRow={removeRow}
@@ -102,12 +101,12 @@ export default function App() {
           setDarkMode={setDarkMode}
         />
 
-        {/* Chart container */}
         <div className="flex-1 flex items-center justify-center p-2 overflow-auto">
-          <div className="bg-white w-full max-w-full sm:max-w-md md:max-w-3xl lg:max-w-4xl h-[300px] sm:h-[400px] md:h-[450px] lg:h-[400px] shadow-md rounded">
+          <div className="bg-white w-full max-w-4xl h-[400px] shadow-md rounded">
             <Chart rows={rows} chartType={chartType} chartSettings={chartSettings} />
           </div>
         </div>
+
       </div>
     </>
   );
